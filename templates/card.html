@@ -238,8 +238,12 @@
     <!-- Header com marca -->
     <div class="card-header">
       <div class="brand-left">
-        <span class="brand-tecar">Tecar</span>
-        <span class="brand-sub">Concessionária oficial</span>
+        {% if card.logo_path %}
+          <img src="/static/{{ card.logo_path }}" alt="Logo Tecar" style="height:48px;max-width:140px;object-fit:contain;filter:brightness(0) invert(1);">
+        {% else %}
+          <span class="brand-tecar">Tecar</span>
+          <span class="brand-sub">Concessionária oficial</span>
+        {% endif %}
       </div>
 
       <!-- Badge Fiat SVG -->
