@@ -4,8 +4,9 @@ import bcrypt
 from dataclasses import dataclass
 
 # Em produção (Railway), configure DATA_DIR apontando para um volume persistente
-_data_dir = os.environ.get("DATA_DIR", ".")
-os.makedirs(_data_dir, exist_ok=True)  # cria /data se não existir
+# Usa /tmp (sempre gravável) ou DATA_DIR se configurado com volume real
+_data_dir = os.environ.get("DATA_DIR", "/tmp")
+os.makedirs(_data_dir, exist_ok=True)
 DB_PATH = os.path.join(_data_dir, "cartao.db")
 
 
