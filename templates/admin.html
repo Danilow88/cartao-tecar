@@ -6,106 +6,134 @@
   <title>Admin — Editar Cartão</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background: #1a1a1a;
+      background: #111;
       color: white;
       min-height: 100vh;
-      padding: 24px 16px;
+      padding: 28px 16px 48px;
+      -webkit-font-smoothing: antialiased;
     }
-    .container { max-width: 480px; margin: 0 auto; }
+    .container { max-width: 520px; margin: 0 auto; }
+
+    /* Header */
     header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 28px;
     }
-    h1 { font-size: 20px; color: #c0392b; }
-    .header-actions { display: flex; gap: 10px; }
+    .header-left h1 { font-size: 20px; font-weight: 700; color: #cc2a2a; }
+    .header-left p  { font-size: 12px; color: rgba(255,255,255,0.3); margin-top: 2px; }
+    .header-actions { display: flex; gap: 8px; }
     .btn-sm {
-      padding: 7px 14px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      border: none;
+      padding: 8px 14px; border-radius: 8px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      text-decoration: none; border: none; font-family: 'Inter', sans-serif;
     }
-    .btn-outline { background: transparent; border: 1px solid #555; color: #ccc; }
-    .btn-danger { background: transparent; border: 1px solid #c0392b; color: #c0392b; }
-    .card-form {
-      background: #2a2a2a;
-      border-radius: 16px;
-      padding: 24px;
-      border: 1px solid #3a3a3a;
+    .btn-outline { background: transparent; border: 1px solid #444; color: #aaa; }
+    .btn-danger  { background: transparent; border: 1px solid #cc2a2a; color: #cc2a2a; }
+
+    /* Alertas */
+    .alert {
+      border-radius: 10px; padding: 12px 16px;
+      font-size: 13px; margin-bottom: 20px;
     }
-    .success {
-      background: rgba(39,174,96,0.15);
-      border: 1px solid #27ae60;
-      color: #2ecc71;
-      border-radius: 8px;
-      padding: 10px 14px;
-      font-size: 13px;
-      margin-bottom: 20px;
+    .alert-success { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.3); color: #4ade80; }
+    .alert-info    { background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.25); color: #7dd3fc; }
+    .alert-info strong { display: block; margin-bottom: 6px; font-size: 12px; letter-spacing: 0.5px; }
+    .alert-info code {
+      display: block; margin-top: 4px; padding: 6px 8px;
+      background: rgba(0,0,0,0.3); border-radius: 6px;
+      font-family: monospace; font-size: 11px; color: #93c5fd;
+      word-break: break-all;
     }
-    .field { margin-bottom: 20px; }
-    label { display: block; color: #aaa; font-size: 13px; margin-bottom: 6px; }
-    input[type="text"] {
-      width: 100%;
-      padding: 11px 14px;
+
+    /* Formulário */
+    .form-card {
       background: #1a1a1a;
-      border: 1px solid #3a3a3a;
-      border-radius: 8px;
-      color: white;
-      font-size: 14px;
-      outline: none;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 18px;
+      overflow: hidden;
     }
-    input[type="text"]:focus { border-color: #c0392b; }
-    .upload-area {
-      border: 2px dashed #3a3a3a;
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-      cursor: pointer;
+    .form-section { padding: 24px; border-bottom: 1px solid rgba(255,255,255,0.06); }
+    .form-section:last-child { border-bottom: none; }
+    .section-title {
+      font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      margin-bottom: 18px;
+    }
+
+    .field { margin-bottom: 16px; }
+    .field:last-child { margin-bottom: 0; }
+    label { display: block; font-size: 12px; color: rgba(255,255,255,0.45); margin-bottom: 6px; }
+
+    input[type="text"] {
+      width: 100%; padding: 12px 14px;
+      background: #111; border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: white; font-size: 14px;
+      outline: none; font-family: 'Inter', sans-serif;
       transition: border-color 0.2s;
     }
-    .upload-area:hover { border-color: #c0392b; }
-    .upload-area input[type="file"] { display: none; }
-    .upload-label { cursor: pointer; font-size: 13px; color: #888; }
-    .preview-img {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-top: 10px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
+    input[type="text"]:focus { border-color: #cc2a2a; }
+
+    /* Upload */
+    .upload-wrap { display: flex; align-items: center; gap: 14px; }
+    .upload-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 16px; border-radius: 9px; cursor: pointer;
+      background: #222; border: 1px solid rgba(255,255,255,0.1);
+      font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.7);
+      transition: border-color 0.2s, background 0.2s; white-space: nowrap;
     }
-    .current-img { font-size: 12px; color: #666; margin-top: 8px; text-align: center; }
+    .upload-btn:hover { border-color: #cc2a2a; background: #2a1a1a; }
+    .upload-btn input[type="file"] { display: none; }
+
+    .thumb-wrap { position: relative; flex-shrink: 0; }
+    .thumb {
+      width: 62px; height: 62px;
+      border-radius: 10px; object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #222; display: block;
+    }
+    .thumb-wide {
+      width: 110px; height: 62px;
+      border-radius: 10px; object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: #222; display: block;
+    }
+    .thumb-placeholder {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; background: #1e1e1e;
+      border: 1px dashed rgba(255,255,255,0.12);
+    }
+    .upload-hint { font-size: 11px; color: rgba(255,255,255,0.2); margin-top: 6px; }
+
+    /* Botão salvar */
     .btn-save {
-      width: 100%;
-      padding: 14px;
-      background: #c0392b;
-      color: white;
-      border: none;
-      border-radius: 10px;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: background 0.2s;
+      width: 100%; padding: 16px; margin: 24px 0 0;
+      background: linear-gradient(135deg, #cc2a2a, #8b1818);
+      color: white; border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700; cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      box-shadow: 0 6px 20px rgba(204,42,42,0.35);
+      transition: opacity 0.2s, transform 0.15s;
     }
-    .btn-save:hover { background: #a93226; }
+    .btn-save:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-save:active { transform: translateY(0); }
   </style>
 </head>
 <body>
   <div class="container">
+
     <header>
-      <h1>Editar Cartão</h1>
+      <div class="header-left">
+        <h1>Editar Cartão</h1>
+        <p>Tecar Fiat</p>
+      </div>
       <div class="header-actions">
-        <a href="/" class="btn-sm btn-outline" target="_blank">Ver cartão</a>
+        <a href="/" class="btn-sm btn-outline" target="_blank">Ver cartão ↗</a>
         <form method="post" action="/admin/logout" style="margin:0">
           <button type="submit" class="btn-sm btn-danger">Sair</button>
         </form>
@@ -113,66 +141,122 @@
     </header>
 
     {% if request.query_params.get('saved') %}
-    <div class="success">✓ Cartão atualizado com sucesso!</div>
+    <div class="alert alert-success">✓ Cartão atualizado com sucesso!</div>
     {% endif %}
 
-    <form class="card-form" method="post" action="/admin/save" enctype="multipart/form-data">
-      <div class="field">
-        <label>Nome</label>
-        <input type="text" name="nome" value="{{ card.nome }}" placeholder="Seu nome completo">
-      </div>
-      <div class="field">
-        <label>Telefone / WhatsApp</label>
-        <input type="text" name="telefone" value="{{ card.telefone }}" placeholder="(11) 99999-9999">
-      </div>
-      <div class="field">
-        <label>Endereço</label>
-        <input type="text" name="endereco" value="{{ card.endereco }}" placeholder="Rua, número — Bairro, Cidade">
-      </div>
+    <!-- Dica de persistência -->
+    <div class="alert alert-info">
+      <strong>💡 Para dados não se perderem ao reiniciar o servidor</strong>
+      Adicione no Railway → Variables:
+      <code>CARD_NOME={{ card.nome or 'seu nome' }}</code>
+      <code>CARD_TELEFONE={{ card.telefone or 'seu telefone' }}</code>
+      <code>CARD_ENDERECO={{ card.endereco or 'seu endereço' }}</code>
+      Para imagens: configure um Volume no Railway em <strong>/data</strong> e adicione <strong>DATA_DIR=/data</strong>.
+    </div>
 
-      <div class="field">
-        <label>Foto do consultor</label>
-        <div class="upload-area" onclick="document.getElementById('foto-input').click()">
-          <label class="upload-label">📷 Clique para escolher foto (JPG/PNG, máx 2MB)</label>
-          <input type="file" id="foto-input" name="foto" accept="image/jpeg,image/png"
-                 onchange="previewImage(this, 'foto-preview')">
-          <img id="foto-preview"
-               {% if card.foto_path %}src="/static/{{ card.foto_path }}"{% endif %}
-               class="preview-img"
-               {% if not card.foto_path %}style="display:none"{% endif %}>
+    <form class="form-card" method="post" action="/admin/save" enctype="multipart/form-data">
+
+      <!-- Dados de texto -->
+      <div class="form-section">
+        <div class="section-title">Informações</div>
+        <div class="field">
+          <label>Nome completo</label>
+          <input type="text" name="nome" value="{{ card.nome }}" placeholder="Ex: João da Silva">
         </div>
-        {% if card.foto_path %}<p class="current-img">Foto atual carregada</p>{% endif %}
-      </div>
-
-      <div class="field">
-        <label>Logo da empresa</label>
-        <div class="upload-area" onclick="document.getElementById('logo-input').click()">
-          <label class="upload-label">🏢 Clique para escolher logo (JPG/PNG, máx 2MB)</label>
-          <input type="file" id="logo-input" name="logo" accept="image/jpeg,image/png"
-                 onchange="previewImage(this, 'logo-preview')">
-          <img id="logo-preview"
-               {% if card.logo_path %}src="/static/{{ card.logo_path }}"{% endif %}
-               class="preview-img"
-               {% if not card.logo_path %}style="display:none"{% endif %}>
+        <div class="field">
+          <label>Telefone / WhatsApp</label>
+          <input type="text" name="telefone" value="{{ card.telefone }}" placeholder="(11) 99999-9999">
         </div>
-        {% if card.logo_path %}<p class="current-img">Logo atual carregado</p>{% endif %}
+        <div class="field">
+          <label>Endereço</label>
+          <input type="text" name="endereco" value="{{ card.endereco }}" placeholder="Av. Exemplo, 100 — Bairro, Cidade">
+        </div>
       </div>
 
-      <button type="submit" class="btn-save">💾 Salvar alterações</button>
+      <!-- Foto do consultor -->
+      <div class="form-section">
+        <div class="section-title">Foto do consultor</div>
+        <div class="upload-wrap">
+          <label class="upload-btn">
+            📷 Escolher foto
+            <input type="file" name="foto" accept="image/jpeg,image/png,image/webp"
+                   onchange="preview(this,'foto-thumb')">
+          </label>
+          <div class="thumb-wrap">
+            {% if card.foto_path %}
+              <img id="foto-thumb" class="thumb" src="/static/{{ card.foto_path }}" alt="Foto">
+            {% else %}
+              <div id="foto-thumb" class="thumb thumb-placeholder">👤</div>
+            {% endif %}
+          </div>
+        </div>
+        <p class="upload-hint">JPG · PNG · WebP · máx 5MB</p>
+      </div>
+
+      <!-- Logo -->
+      <div class="form-section">
+        <div class="section-title">Logo da concessionária</div>
+        <div class="upload-wrap">
+          <label class="upload-btn">
+            🏢 Escolher logo
+            <input type="file" name="logo" accept="image/jpeg,image/png,image/webp"
+                   onchange="preview(this,'logo-thumb')">
+          </label>
+          <div class="thumb-wrap">
+            {% if card.logo_path %}
+              <img id="logo-thumb" class="thumb-wide" src="/static/{{ card.logo_path }}" alt="Logo">
+            {% else %}
+              <div id="logo-thumb" class="thumb-wide thumb-placeholder">🏢</div>
+            {% endif %}
+          </div>
+        </div>
+        <p class="upload-hint">O logo aparece no cabeçalho vermelho do cartão · JPG · PNG · WebP · máx 5MB</p>
+      </div>
+
+      <!-- Foto de fundo -->
+      <div class="form-section">
+        <div class="section-title">Foto de fundo</div>
+        <div class="upload-wrap">
+          <label class="upload-btn">
+            🖼️ Escolher fundo
+            <input type="file" name="bg" accept="image/jpeg,image/png,image/webp"
+                   onchange="preview(this,'bg-thumb')">
+          </label>
+          <div class="thumb-wrap">
+            {% if card.bg_path %}
+              <img id="bg-thumb" class="thumb-wide" src="/static/{{ card.bg_path }}" alt="Fundo">
+            {% else %}
+              <div id="bg-thumb" class="thumb-wide thumb-placeholder" style="font-size:14px;color:rgba(255,255,255,0.2);">sem fundo</div>
+            {% endif %}
+          </div>
+        </div>
+        <p class="upload-hint">Aparece atrás do cartão · JPG · PNG · WebP · máx 5MB</p>
+      </div>
+
+      <div style="padding: 0 24px 24px">
+        <button type="submit" class="btn-save">💾 Salvar alterações</button>
+      </div>
     </form>
+
   </div>
 
   <script>
-    function previewImage(input, previewId) {
-      const preview = document.getElementById(previewId);
-      if (input.files && input.files[0]) {
-        const reader = new FileReader();
-        reader.onload = e => {
-          preview.src = e.target.result;
-          preview.style.display = 'block';
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
+    function preview(input, id) {
+      if (!input.files || !input.files[0]) return;
+      const reader = new FileReader();
+      reader.onload = e => {
+        const el = document.getElementById(id);
+        if (el.tagName === 'IMG') {
+          el.src = e.target.result;
+        } else {
+          const img = document.createElement('img');
+          img.id = id;
+          img.src = e.target.result;
+          img.className = el.className.replace('thumb-placeholder','').trim();
+          el.replaceWith(img);
+        }
+      };
+      reader.readAsDataURL(input.files[0]);
     }
   </script>
 </body>
