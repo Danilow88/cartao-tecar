@@ -4,296 +4,482 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ card.nome or 'Consultor Tecar Fiat' }}</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       font-family: 'Inter', sans-serif;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #111;
+      background: #0a0a0a;
       padding: 24px 16px;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── Card principal ── */
-    .card {
+    /* Fundo com textura sutil */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 20% 10%, rgba(180,20,20,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 80% 90%, rgba(180,20,20,0.05) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    /* ── Wrapper do cartão ── */
+    .card-wrap {
       width: 100%;
-      max-width: 420px;
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+      max-width: 400px;
       position: relative;
     }
 
-    /* Faixa superior vermelha — header da marca */
-    .card-header {
-      background: linear-gradient(135deg, #d92b2b 0%, #8b1a1a 100%);
-      padding: 22px 24px 20px;
+    /* Brilho atrás do cartão */
+    .card-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -2px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, rgba(200,30,30,0.4) 0%, transparent 50%, rgba(200,30,30,0.15) 100%);
+      filter: blur(1px);
+      z-index: 0;
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      border-radius: 26px;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        0 40px 100px rgba(0,0,0,0.8),
+        0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    /* ══════════════════════════════
+       HEADER
+    ══════════════════════════════ */
+    .header {
+      background: linear-gradient(135deg, #c0392b 0%, #7b1a1a 60%, #5a1010 100%);
+      padding: 26px 26px 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Padrão geométrico de fundo no header */
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 200px; height: 200px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -20px; left: 30%;
+      width: 120px; height: 120px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .header-inner {
+      position: relative;
+      z-index: 1;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      position: relative;
-    }
-    .card-header::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0; right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
     }
 
-    .brand-left {
+    /* Logo / nome da concessionária */
+    .brand {
       display: flex;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
     }
-    .brand-tecar {
-      font-size: 22px;
-      font-weight: 800;
-      letter-spacing: 3px;
+
+    .brand-logo img {
+      height: 44px;
+      max-width: 150px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+      display: block;
+    }
+
+    .brand-name {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 4px;
       color: white;
       text-transform: uppercase;
       line-height: 1;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.3);
     }
-    .brand-sub {
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: 2px;
-      color: rgba(255,255,255,0.65);
+    .brand-tagline {
+      font-size: 8.5px;
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      color: rgba(255,255,255,0.55);
       text-transform: uppercase;
+      margin-top: 1px;
     }
 
-    /* Logo Fiat SVG */
+    /* Badge Fiat */
     .fiat-badge {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      flex-shrink: 0;
     }
-    .fiat-badge svg {
-      width: 44px;
-      height: 44px;
-      filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+
+    .fiat-shield {
+      width: 52px;
+      height: 52px;
+      position: relative;
     }
-    .fiat-text {
-      font-size: 8px;
+
+    .fiat-shield svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 3px 8px rgba(0,0,0,0.5));
+    }
+
+    .fiat-label {
+      font-size: 7.5px;
       letter-spacing: 3px;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255,255,255,0.5);
       font-weight: 600;
       text-transform: uppercase;
     }
 
-    /* ── Corpo do cartão ── */
-    .card-body {
-      background: #1c1c1c;
-      padding: 24px 24px 28px;
-      color: white;
+    /* Linha separadora no header */
+    .header-divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      margin: 18px 0 0;
+      position: relative;
+      z-index: 1;
     }
 
-    /* Perfil */
-    .profile {
+    /* ══════════════════════════════
+       PERFIL
+    ══════════════════════════════ */
+    .profile-section {
+      background: #141414;
+      padding: 24px 26px 0;
       display: flex;
       align-items: center;
-      gap: 18px;
-      margin-bottom: 22px;
-      padding-bottom: 22px;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      gap: 20px;
     }
 
-    .photo-ring {
+    .photo-container {
       flex-shrink: 0;
-      width: 84px;
-      height: 84px;
-      border-radius: 50%;
-      padding: 3px;
-      background: linear-gradient(135deg, #d92b2b, #8b1a1a);
+      position: relative;
     }
-    .photo-ring img {
+
+    .photo-outer {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      padding: 2.5px;
+      background: linear-gradient(135deg, #c0392b, #ff6b6b, #c0392b);
+      background-size: 200% 200%;
+      animation: spin-gradient 4s linear infinite;
+    }
+
+    @keyframes spin-gradient {
+      0%   { background-position: 0% 50%; }
+      50%  { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #141414;
+      padding: 2px;
+    }
+
+    .photo-inner img {
       width: 100%;
       height: 100%;
       border-radius: 50%;
       object-fit: cover;
       display: block;
-      background: #2a2a2a;
     }
+
     .photo-placeholder {
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: #2a2a2a;
+      background: #1f1f1f;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 28px;
+      font-size: 30px;
     }
 
-    .person-info { flex: 1; min-width: 0; }
+    /* Ponto verde de status */
+    .status-dot {
+      position: absolute;
+      bottom: 4px;
+      right: 4px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22c55e;
+      border: 2.5px solid #141414;
+      box-shadow: 0 0 8px rgba(34,197,94,0.6);
+    }
+
+    .person-info {
+      flex: 1;
+      min-width: 0;
+      padding-bottom: 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
     .person-name {
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
+      color: white;
       line-height: 1.2;
-      color: #fff;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .person-role {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-    .role-tag {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      text-transform: uppercase;
-      color: #d92b2b;
-      background: rgba(217,43,43,0.12);
-      border: 1px solid rgba(217,43,43,0.3);
-      border-radius: 4px;
-      padding: 3px 7px;
-      display: inline-block;
-      width: fit-content;
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
     }
 
-    /* Contatos */
-    .contacts { display: flex; flex-direction: column; gap: 12px; margin-bottom: 22px; }
-    .contact-row {
-      display: flex;
-      align-items: flex-start;
-      gap: 12px;
+    .tag {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      padding: 4px 9px;
+      border-radius: 4px;
+      border: 1px solid rgba(192,57,43,0.4);
+      color: #e87070;
+      background: rgba(192,57,43,0.08);
     }
-    .contact-icon {
-      width: 34px;
-      height: 34px;
-      background: rgba(217,43,43,0.1);
-      border: 1px solid rgba(217,43,43,0.2);
-      border-radius: 8px;
+
+    /* ══════════════════════════════
+       CONTATOS
+    ══════════════════════════════ */
+    .contacts-section {
+      background: #141414;
+      padding: 20px 26px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .contact-icon-wrap {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: #1e1e1e;
+      border: 1px solid rgba(255,255,255,0.07);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 15px;
+      font-size: 16px;
       flex-shrink: 0;
     }
-    .contact-detail { display: flex; flex-direction: column; justify-content: center; }
-    .contact-label { font-size: 9px; font-weight: 600; letter-spacing: 1.5px; color: rgba(255,255,255,0.35); text-transform: uppercase; }
-    .contact-value { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.9); line-height: 1.4; margin-top: 1px; }
 
-    /* Botão WhatsApp */
+    .contact-text { flex: 1; min-width: 0; }
+    .contact-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.28);
+      text-transform: uppercase;
+      display: block;
+      margin-bottom: 2px;
+    }
+    .contact-value {
+      font-size: 13.5px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.88);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ══════════════════════════════
+       BOTÃO WHATSAPP
+    ══════════════════════════════ */
+    .cta-section {
+      background: #141414;
+      padding: 4px 26px 26px;
+    }
+
     .btn-whatsapp {
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
       width: 100%;
-      padding: 15px;
-      background: linear-gradient(135deg, #25d366, #128c7e);
-      color: white;
+      padding: 16px;
       border-radius: 14px;
       text-decoration: none;
       font-weight: 700;
-      font-size: 14px;
-      letter-spacing: 0.3px;
-      transition: opacity 0.2s, transform 0.1s;
-      box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+      font-size: 14.5px;
+      letter-spacing: 0.2px;
+      color: white;
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+      box-shadow: 0 6px 24px rgba(34,197,94,0.3);
+      transition: transform 0.15s, box-shadow 0.15s;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-whatsapp:hover { opacity: 0.92; transform: translateY(-1px); }
-    .btn-whatsapp:active { transform: translateY(0); }
-    .btn-whatsapp svg { width: 20px; height: 20px; fill: white; flex-shrink: 0; }
 
-    /* Footer */
-    .card-footer {
-      background: #151515;
-      padding: 12px 24px;
+    .btn-whatsapp::before {
+      content: '';
+      position: absolute;
+      top: 0; left: -100%;
+      width: 60%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-whatsapp:hover::before { left: 150%; }
+    .btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(34,197,94,0.4); }
+    .btn-whatsapp:active { transform: translateY(0); }
+
+    .btn-whatsapp svg { width: 22px; height: 22px; fill: white; flex-shrink: 0; }
+
+    /* ══════════════════════════════
+       FOOTER
+    ══════════════════════════════ */
+    .footer {
+      background: #0f0f0f;
+      border-top: 1px solid rgba(255,255,255,0.04);
+      padding: 12px 26px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
     }
-    .footer-text {
-      font-size: 10px;
-      color: rgba(255,255,255,0.18);
-      letter-spacing: 1px;
+
+    .footer-brand {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: rgba(255,255,255,0.15);
       text-transform: uppercase;
     }
-    .admin-link {
-      font-size: 10px;
-      color: rgba(255,255,255,0.15);
+
+    .footer-admin {
+      font-size: 9px;
+      color: rgba(255,255,255,0.1);
       text-decoration: none;
       letter-spacing: 1px;
-      margin-left: 12px;
       transition: color 0.2s;
     }
-    .admin-link:hover { color: rgba(255,255,255,0.4); }
+    .footer-admin:hover { color: rgba(255,255,255,0.35); }
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card-wrap">
+    <div class="card">
 
-    <!-- Header com marca -->
-    <div class="card-header">
-      <div class="brand-left">
-        {% if card.logo_path %}
-          <img src="/static/{{ card.logo_path }}" alt="Logo Tecar" style="height:48px;max-width:140px;object-fit:contain;filter:brightness(0) invert(1);">
-        {% else %}
-          <span class="brand-tecar">Tecar</span>
-          <span class="brand-sub">Concessionária oficial</span>
-        {% endif %}
-      </div>
+      <!-- ── HEADER ── -->
+      <div class="header">
+        <div class="header-inner">
 
-      <!-- Badge Fiat SVG -->
-      <div class="fiat-badge">
-        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <!-- Escudo Fiat simplificado -->
-          <defs>
-            <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" style="stop-color:#fff;stop-opacity:1"/>
-              <stop offset="100%" style="stop-color:#ddd;stop-opacity:1"/>
-            </linearGradient>
-          </defs>
-          <!-- Forma do escudo -->
-          <path d="M50 5 L85 18 L88 55 Q88 80 50 97 Q12 80 12 55 L15 18 Z"
-                fill="none" stroke="rgba(255,255,255,0.9)" stroke-width="3"/>
-          <!-- Letras FIAT -->
-          <text x="50" y="62" text-anchor="middle" font-family="Inter,Arial,sans-serif"
-                font-size="24" font-weight="800" fill="white" letter-spacing="1">FIAT</text>
-        </svg>
-        <span class="fiat-text">Official</span>
-      </div>
-    </div>
+          <!-- Logo ou nome -->
+          <div class="brand">
+            {% if card.logo_path %}
+              <div class="brand-logo">
+                <img src="/static/{{ card.logo_path }}" alt="Logo Tecar">
+              </div>
+            {% else %}
+              <span class="brand-name">Tecar</span>
+              <span class="brand-tagline">Concessionária Oficial</span>
+            {% endif %}
+          </div>
 
-    <!-- Corpo -->
-    <div class="card-body">
+          <!-- Badge Fiat -->
+          <div class="fiat-badge">
+            <div class="fiat-shield">
+              <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:rgba(255,255,255,0.25)"/>
+                    <stop offset="100%" style="stop-color:rgba(255,255,255,0.05)"/>
+                  </linearGradient>
+                </defs>
+                <!-- Escudo externo -->
+                <path d="M50 4 L90 18 L93 58 Q93 88 50 106 Q7 88 7 58 L10 18 Z"
+                      fill="url(#shieldGrad)" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+                <!-- Linha interna -->
+                <path d="M50 12 L82 24 L85 58 Q85 82 50 98 Q15 82 15 58 L18 24 Z"
+                      fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                <!-- Texto FIAT -->
+                <text x="50" y="70" text-anchor="middle"
+                      font-family="Inter,Arial,sans-serif"
+                      font-size="26" font-weight="900"
+                      fill="white" letter-spacing="1"
+                      style="text-shadow:0 2px 8px rgba(0,0,0,0.5)">FIAT</text>
+              </svg>
+            </div>
+            <span class="fiat-label">Oficial</span>
+          </div>
 
-      <!-- Perfil -->
-      <div class="profile">
-        <div class="photo-ring">
-          {% if card.foto_path %}
-            <img src="/static/{{ card.foto_path }}" alt="Foto">
-          {% else %}
-            <div class="photo-placeholder">👤</div>
-          {% endif %}
         </div>
+        <div class="header-divider"></div>
+      </div>
+
+      <!-- ── PERFIL ── -->
+      <div class="profile-section">
+        <div class="photo-container">
+          <div class="photo-outer">
+            <div class="photo-inner">
+              {% if card.foto_path %}
+                <img src="/static/{{ card.foto_path }}" alt="Foto">
+              {% else %}
+                <div class="photo-placeholder">👤</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="status-dot"></div>
+        </div>
+
         <div class="person-info">
           <div class="person-name">{{ card.nome or 'Seu Nome' }}</div>
-          <div class="person-role">
-            <span class="role-tag">Novos</span>
-            <span class="role-tag">Seminovos</span>
+          <div class="tags">
+            <span class="tag">Consultor</span>
+            <span class="tag">Novos</span>
+            <span class="tag">Seminovos</span>
           </div>
         </div>
       </div>
 
-      <!-- Contatos -->
-      <div class="contacts">
+      <!-- ── CONTATOS ── -->
+      {% if card.telefone or card.endereco %}
+      <div class="contacts-section">
         {% if card.telefone %}
-        <div class="contact-row">
-          <div class="contact-icon">📞</div>
-          <div class="contact-detail">
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📞</div>
+          <div class="contact-text">
             <span class="contact-label">Telefone</span>
             <span class="contact-value">{{ card.telefone }}</span>
           </div>
@@ -301,34 +487,37 @@
         {% endif %}
 
         {% if card.endereco %}
-        <div class="contact-row">
-          <div class="contact-icon">📍</div>
-          <div class="contact-detail">
+        <div class="contact-item">
+          <div class="contact-icon-wrap">📍</div>
+          <div class="contact-text">
             <span class="contact-label">Endereço</span>
             <span class="contact-value">{{ card.endereco }}</span>
           </div>
         </div>
         {% endif %}
       </div>
-
-      <!-- WhatsApp -->
-      {% if card.telefone %}
-      <a class="btn-whatsapp"
-         href="https://wa.me/55{{ card.telefone | replace(' ','') | replace('(','') | replace(')','') | replace('-','') }}"
-         target="_blank">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
-        </svg>
-        Chamar no WhatsApp
-      </a>
       {% endif %}
 
-    </div>
+      <!-- ── CTA WHATSAPP ── -->
+      {% if card.telefone %}
+      <div class="cta-section">
+        <a class="btn-whatsapp"
+           href="https://wa.me/55{{ card.telefone | replace(' ','') | replace('(','') | replace(')','') | replace('-','') }}"
+           target="_blank">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+          </svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+      {% endif %}
 
-    <!-- Footer -->
-    <div class="card-footer">
-      <span class="footer-text">Tecar Fiat</span>
-      <a href="/admin/login" class="admin-link">·  admin</a>
+      <!-- ── FOOTER ── -->
+      <div class="footer">
+        <span class="footer-brand">Tecar · Fiat</span>
+        <a href="/admin/login" class="footer-admin">admin</a>
+      </div>
+
     </div>
   </div>
 </body>
