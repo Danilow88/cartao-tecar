@@ -248,15 +248,29 @@
       padding: 22px 28px;
       display: flex; flex-direction: column; gap: 16px;
     }
-    .contact-item { display: flex; align-items: center; gap: 14px; }
+    .contact-item {
+      display: flex; align-items: center; gap: 14px;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 4px;
+      margin: -4px;
+      transition: background 0.2s;
+    }
+    .contact-item:hover { background: rgba(255,255,255,0.04); }
     .contact-icon {
       width: 40px; height: 40px;
       border-radius: 10px;
       background: #1e1e1e;
       border: 1px solid rgba(255,255,255,0.07);
       display: flex; align-items: center; justify-content: center;
-      font-size: 17px; flex-shrink: 0;
+      flex-shrink: 0;
+      color: rgba(255,255,255,0.55);
+      transition: border-color 0.2s, color 0.2s;
     }
+    .contact-icon svg { width: 18px; height: 18px; }
+    .contact-item:hover .contact-icon { border-color: rgba(204,42,42,0.5); color: #ef8080; }
+    .contact-icon-map { color: rgba(255,255,255,0.55); }
+    .contact-item:hover .contact-icon-map { border-color: rgba(66,153,225,0.5); color: #90cdf4; }
     .contact-text { flex: 1; min-width: 0; }
     .contact-label {
       font-size: 9px; font-weight: 600;
@@ -397,22 +411,31 @@
       {% if card.telefone or card.endereco %}
       <div class="contacts">
         {% if card.telefone %}
-        <div class="contact-item">
-          <div class="contact-icon">📞</div>
+        <a class="contact-item" href="tel:{{ card.telefone | replace(' ','') | replace('(','') | replace(')','') | replace('-','') }}">
+          <div class="contact-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.7A2 2 0 012 1h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 8.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/>
+            </svg>
+          </div>
           <div class="contact-text">
             <span class="contact-label">Telefone</span>
             <span class="contact-value">{{ card.telefone }}</span>
           </div>
-        </div>
+        </a>
         {% endif %}
         {% if card.endereco %}
-        <div class="contact-item">
-          <div class="contact-icon">📍</div>
+        <a class="contact-item" href="https://www.google.com/maps/search/?api=1&query={{ card.endereco | urlencode }}" target="_blank" rel="noopener">
+          <div class="contact-icon contact-icon-map">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+              <circle cx="12" cy="10" r="3"/>
+            </svg>
+          </div>
           <div class="contact-text">
-            <span class="contact-label">Endereço</span>
+            <span class="contact-label">Endereço · ver no mapa ↗</span>
             <span class="contact-value">{{ card.endereco }}</span>
           </div>
-        </div>
+        </a>
         {% endif %}
       </div>
       {% endif %}

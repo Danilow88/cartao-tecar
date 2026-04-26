@@ -8,6 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from itsdangerous import URLSafeTimedSerializer, BadSignature, SignatureExpired
 
+from urllib.parse import quote
 from models import init_db, get_card, save_card, verify_admin
 
 SECRET_KEY = os.environ.get("SECRET_KEY", "dev-secret-key-change-in-prod")
@@ -19,6 +20,7 @@ ALLOWED_TYPES = {"image/jpeg", "image/png", "image/webp"}
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
+templates.env.filters["urlencode"] = lambda s: quote(str(s), safe="")
 serializer = URLSafeTimedSerializer(SECRET_KEY)
 
 
