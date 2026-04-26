@@ -87,9 +87,9 @@ async def admin_page(request: Request):
 @app.post("/admin/save")
 async def admin_save(
     request: Request,
-    nome: str = Form(...),
-    telefone: str = Form(...),
-    endereco: str = Form(...),
+    nome: str = Form(""),
+    telefone: str = Form(""),
+    endereco: str = Form(""),
     foto: UploadFile = File(None),
     logo: UploadFile = File(None),
 ):
