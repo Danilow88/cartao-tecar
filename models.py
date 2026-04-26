@@ -4,7 +4,9 @@ import bcrypt
 from dataclasses import dataclass
 
 # Em produção (Railway), configure DATA_DIR apontando para um volume persistente
-DB_PATH = os.path.join(os.environ.get("DATA_DIR", "."), "cartao.db")
+_data_dir = os.environ.get("DATA_DIR", ".")
+os.makedirs(_data_dir, exist_ok=True)  # cria /data se não existir
+DB_PATH = os.path.join(_data_dir, "cartao.db")
 
 
 def _conn() -> sqlite3.Connection:
