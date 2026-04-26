@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a1a;
+      padding: 20px;
+    }
+    .box {
+      background: #2a2a2a;
+      border-radius: 16px;
+      padding: 36px 28px;
+      width: 100%;
+      max-width: 360px;
+      border: 1px solid #3a3a3a;
+    }
+    h1 { color: #c0392b; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+    .sub { color: #888; font-size: 13px; margin-bottom: 28px; }
+    label { display: block; color: #ccc; font-size: 13px; margin-bottom: 6px; }
+    input {
+      width: 100%;
+      padding: 11px 14px;
+      background: #1a1a1a;
+      border: 1px solid #3a3a3a;
+      border-radius: 8px;
+      color: white;
+      font-size: 14px;
+      margin-bottom: 16px;
+      outline: none;
+    }
+    input:focus { border-color: #c0392b; }
+    .error {
+      background: rgba(192,57,43,0.15);
+      border: 1px solid #c0392b;
+      color: #e74c3c;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    button {
+      width: 100%;
+      padding: 13px;
+      background: #c0392b;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #a93226; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h1>Painel Admin</h1>
+    <p class="sub">Tecar Fiat — Cartão de Visitas</p>
+
+    {% if error %}
+    <div class="error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/admin/login">
+      <label>Usuário</label>
+      <input type="text" name="username" autocomplete="username" required>
+      <label>Senha</label>
+      <input type="password" name="password" autocomplete="current-password" required>
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
+</body>
+</html>
